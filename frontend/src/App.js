@@ -4,8 +4,17 @@ import Survey from './components/Survey';
 import './index.css';
 
 function App() {
-  return <Survey />;
-}
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  return (
+    <div className="App">
+      {isLoggedIn ? (
+        <Survey />
+      ) : (
+        <Login onLoginSuccess={() => setIsLoggedIn(true)} />
+      )}
+    </div>
+  );
+}
 
 export default App;
