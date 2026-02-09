@@ -10,7 +10,7 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
     services:
-      # We need a PostGIS instance for Django tests
+      # PostGIS instance for Django tests
       postgres:
         image: postgis/postgis:15-3.3
         env:
@@ -46,6 +46,7 @@ jobs:
       - name: Run Django Tests
         env:
           DATABASE_URL: postgis://postgres:postgres@localhost:5432/irams_test_db
+          SECRET_KEY: "django-insecure-test-key-only-for-ci"
         run: |
           cd backend
           python manage.py test
