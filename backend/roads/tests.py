@@ -1,16 +1,25 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
-class InfrastructureConfigTest(TestCase):
-    def test_database_connection(self):
+User = get_user_model()
+
+class AuthenticationConfigTest(TestCase):
+    def test_custom_user_creation(self):
         """
-        Verify that Django can create a user in the test database.
-        This confirms our PostGIS/Postgres service in the pipeline is active.
+        Verify that the Custom User model works and roles are assigned.
+        This confirms the migration to AbstractUser was successful.
         """
-        user = User.objects.create_user(username='testuser', password='password123')
-        self.assertEqual(user.username, 'testuser')
-        self.assertTrue(User.objects.filter(username='testuser').exists())
+        user = User.objects.create_user(
+            email='test@irams.com', 
+            password='password123',
+            role='SURVEY_AGENT'
+        )
+        # Check email instead of username
+        self.assertEqual(user.email, 'test@irams.com')
+        # Check that our custom role field works
+        self.assertEqual(user.role, 'SURVEY_AGENT')
+        self.assertTrue(User.objects.filter(email='test@irams.com').exists())
 
     def test_environment_health(self):
-        """A simple truth test to ensure the test runner is executing."""
+        """Standard sanity check for the CI pipeline."""
         self.assertTrue(True)
