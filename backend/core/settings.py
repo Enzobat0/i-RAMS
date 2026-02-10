@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import environ
 import os
+from datetime import timedelta
 from pathlib import Path
 
 env = environ.Env(DEBUG=(bool, False))
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'rest_framework',
     'roads',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +87,7 @@ DATABASES = {
     'default': env.db()
 }
 
+AUTH_USER_MODEL = 'authentication.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -104,6 +107,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
