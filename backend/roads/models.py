@@ -6,7 +6,8 @@ class RoadSegment(models.Model):
     district = models.CharField(max_length=50)
     road_class = models.CharField(max_length=50)
     road_type = models.CharField(max_length=50)
-    geom = models.MultiLineStringField()
+    geom = models.MultiLineStringField(srid=4326, geography=True)
+
 
     #attributes for MCA ranking
     pop_within_2km = models.IntegerField(default=0)
