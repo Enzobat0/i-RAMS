@@ -8,15 +8,20 @@ RUN apt-get update && apt-get install -y \
     binutils \
     libproj-dev \
     gdal-bin \
+    libgdal-dev \
+    build-essential \
     python3-gdal \
     libpq-dev \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+
 WORKDIR /app
 
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN GDAL_VERSION=$(gdal-config --version) pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
