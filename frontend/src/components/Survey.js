@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StopCircle, Navigation, Activity, Video } from 'lucide-react';
+import { StopCircle, Navigation, Video } from 'lucide-react';
 
 const Survey = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -63,7 +63,6 @@ const Survey = () => {
           )}
         </div>
 
-        {/* Decorative bottom bar */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#2B7FFF] via-blue-400 to-[#2B7FFF]"></div>
       </div>
     </div>

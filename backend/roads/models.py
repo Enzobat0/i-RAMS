@@ -6,7 +6,8 @@ class RoadSegment(models.Model):
     district = models.CharField(max_length=50)
     road_class = models.CharField(max_length=50)
     road_type = models.CharField(max_length=50)
-    geom = models.MultiLineStringField()
+    geom = models.MultiLineStringField(srid=4326, geography=True)
+
 
     #attributes for MCA ranking
     pop_within_2km = models.IntegerField(default=0)
@@ -21,6 +22,16 @@ class RoadSegment(models.Model):
 
     def __str__(self):
         return f"Segment {self.segment_id} ({self.district})"
+    
+class NationalRoad(models.Model):
+    # Basic data for reference
+    road_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    district = models.CharField(max_length=50)
+    geom = models.MultiLineStringField(srid=4326, geography=True)
+
+    def __str__(self):
+        return f"National Road {self.road_id} - {self.district}"
 
 class ConditionSurvey(models.Model):
 # Tracks every AI survey conducted on a segment 

@@ -1,30 +1,46 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulating the 1.5s delay from your design
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    onLoginSuccess(); // Triggers the view change in App.js
+
+    try {
+      const response = await fetch('http://localhost:8000/api/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        localStorage.setItem('user_role', data.role);
+        localStorage.setItem('user_name', data.full_name);
+        onLoginSuccess(data.role);
+      } else {
+        alert(data.detail || "Invalid credentials.");
+      }
+    } catch (error) {
+      alert("Could not connect to the server.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans text-[#364153]">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-gray-100 animate-fadeIn">
         <div className="p-8 md:p-10">
-          {/* Logo Section */}
           <div className="flex items-center justify-center mb-8">
-            {/* <div className="bg-[#2B7FFF] text-white p-3 rounded-lg shadow-md mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-            </div> */}
             <h1 className="text-3xl font-bold tracking-tight">i-RAMS</h1>
           </div>
 
@@ -40,16 +56,26 @@ const Login = ({ onLoginSuccess }) => {
                 required 
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-1.5">Password</label>
-              <input 
-                type="password" 
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#2B7FFF] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required 
-              />
+              <div className="relative">
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#2B7FFF] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required 
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
 
             <button 
