@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Login from './components/Login';
 import Survey from './components/Survey'; 
+import Dashboard from './pages/Dashboard';
 import './index.css';
 
 function App() {
@@ -8,13 +9,11 @@ function App() {
 
   return (
     <div className="App">
-      {isLoggedIn ? (
-        <Survey />
-      ) : (
-        <Login onLoginSuccess={() => setIsLoggedIn(true)} />
-      )}
+      <Dashboard />
     </div>
   );
 }
+
+
 
 export default App;
