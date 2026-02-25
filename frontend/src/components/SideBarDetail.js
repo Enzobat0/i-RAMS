@@ -1,7 +1,6 @@
 import React from 'react';
 
 const SidebarDetail = ({ segment }) => {
-  const brandColor = "#155DFC";
 
   return (
     <div className="flex flex-col h-full bg-white p-6 font-['Inter']">
