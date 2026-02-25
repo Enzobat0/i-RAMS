@@ -5,7 +5,7 @@ from django.contrib.gis.measure import D
 from roads.models import RoadSegment
 
 class Command(BaseCommand):
-    help = 'Calculates has_hospital based on proximity to Bugesera health facilities'
+    help = 'Counts health facilities within 5km of each road segment'
 
     def handle(self, *args, **options):
         shp_path = '../data/raw/Health Facilities/Health Facilities.shp'
@@ -17,34 +17,37 @@ class Command(BaseCommand):
         ds = DataSource(shp_path)
         layer = ds[0]
 
-        self.stdout.write(f"Processing {len(layer)} health facilities from shapefile...")
+        self.stdout.write(f"Processing {len(layer)} health facilities...")
 
-        hospital_points = []
+        # 1. Reset all counts to 0 first
+        RoadSegment.objects.all().update(health_facility_count=0)
+
+        # 2. Extract valid health facility points once to save memory
+        valid_facilities = []
         for feature in layer:
             district = str(feature.get('district')).strip().upper()
             facility_type = str(feature.get('type')).strip().upper()
             
             if district == 'BUGESERA' and facility_type in ['DISTRICT HOSPITAL', 'HEALTH CENTRE', 'REFERENCE HOSPITAL', 'PROVINCIAL HOSPITAL']:
-                hospital_points.append(feature.geom.geos)
+                pnt = feature.geom.geos
+                pnt.srid = 4326
+                valid_facilities.append(pnt)
 
-        self.stdout.write(f"Filtered to {len(hospital_points)} facilities in Bugesera.")
+        self.stdout.write(f"Found {len(valid_facilities)} relevant facilities in Bugesera.")
 
-        RoadSegment.objects.all().update(has_hospital=False)
-
+        # 3. Efficiently update each segment
         updated_count = 0
-        search_radius = 5  # kilometers
+        segments = RoadSegment.objects.all()
 
-        for pnt in hospital_points:
-            pnt.srid = 4326
-            affected_segments = RoadSegment.objects.filter(
-                geom__distance_lte=(pnt, D(km=search_radius)),
-                has_hospital=False
-            )
-            count = affected_segments.count()
+        for segment in segments:
+            count = 0
+            for facility_pnt in valid_facilities:
+                if segment.geom.distance(facility_pnt) <= 0.045: # ~5km
+                    count += 1
+            
             if count > 0:
-                affected_segments.update(has_hospital=True)
-                updated_count += count
+                segment.health_facility_count = count
+                segment.save()
+                updated_count += 1
 
-        self.stdout.write(self.style.SUCCESS(
-            f"Successfully updated {updated_count} segments with health access."
-        ))
+        self.stdout.write(self.style.SUCCESS(f"Successfully updated {updated_count} roads."))
