@@ -11,8 +11,8 @@ class RoadSegment(models.Model):
 
     #attributes for MCA ranking
     pop_within_2km = models.IntegerField(default=0)
-    has_hospital = models.BooleanField(default=False)
-    has_school = models.BooleanField(default=False)
+    health_facility_count = models.IntegerField(default=0)
+    school_count = models.IntegerField(default=0)
     is_only_access = models.BooleanField(default=False)
 
     #performance attributes
