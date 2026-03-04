@@ -19,42 +19,29 @@ class Command(BaseCommand):
 
         self.stdout.write(f"Processing {len(layer)} schools from shapefile...")
 
-        school_points = []
+        RoadSegment.objects.all().update(school_count=0)
+        segments = RoadSegment.objects.all()
+
         higher_order_keywords = [
             'SECONDARY', 'O LEVEL', 'A LEVEL', 'VTC', 'TVET', 
             'VOCATIONAL', 'TERTIARY', '9YBE', '12YBE', 'O&A', 'IPRC'
         ]
-        for feature in layer:
-            district = str(feature.get('district')).strip().upper()
-            
-            if district == 'BUGESERA':
-                type_raw = str(feature.get('settings_i')).strip().upper()
-                
-                
-                is_higher_education = any(keyword in type_raw for keyword in higher_order_keywords)
-                
-                if is_higher_education:
-                    school_points.append(feature.geom.geos)
 
-        self.stdout.write(f"Filtered to {len(school_points)} schools in Bugesera.")
+        for segment in segments:
+            count = 0
+            for feature in layer:
+                district = str(feature.get('district')).strip().upper()
+                if district == 'BUGESERA':
+                    type_raw = str(feature.get('settings_i')).strip().upper()
+                    
+                    if any(keyword in type_raw for keyword in higher_order_keywords):
+                        school_points= feature.geom.geos
+                        school_points.srid = 4326
 
-        
-        RoadSegment.objects.all().update(has_school=False)
-
-        updated_count = 0
-        search_radius = 2
-
-        for pnt in school_points:
-            pnt.srid = 4326
-            affected_segments = RoadSegment.objects.filter(
-                geom__distance_lte=(pnt, D(km=search_radius)),
-                has_school=False 
-            )
-            count = affected_segments.count()
+                        if segment.geom.distance(school_points) <= 0.018:  # ~2km in degrees
+                            count += 1
             if count > 0:
-                affected_segments.update(has_school=True)
-                updated_count += count
-
-        self.stdout.write(self.style.SUCCESS(
-            f"Successfully updated {updated_count} segments with school access."
-        ))
+                segment.school_count = count
+                segment.save()
+                             
+        self.stdout.write(self.style.SUCCESS(f"Updated {segments.filter(school_count__gt=0).count()} roads with school counts."))

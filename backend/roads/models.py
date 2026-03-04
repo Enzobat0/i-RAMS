@@ -11,8 +11,8 @@ class RoadSegment(models.Model):
 
     #attributes for MCA ranking
     pop_within_2km = models.IntegerField(default=0)
-    has_hospital = models.BooleanField(default=False)
-    has_school = models.BooleanField(default=False)
+    health_facility_count = models.IntegerField(default=0)
+    school_count = models.IntegerField(default=0)
     is_only_access = models.BooleanField(default=False)
 
     #performance attributes
@@ -32,6 +32,15 @@ class NationalRoad(models.Model):
 
     def __str__(self):
         return f"National Road {self.road_id} - {self.district}"
+    
+class InfrastructurePoint(models.Model):
+    point_type = models.CharField(max_length=20) # 'school' or 'healthcare'
+    name = models.CharField(max_length=255, null=True, blank=True)
+    facility_type = models.CharField(max_length=100, null=True, blank=True) # e.g., 'Health Centre'
+    geom = models.PointField(srid=4326) 
+
+    def __str__(self):
+        return f"{self.name} ({self.point_type})"
 
 class ConditionSurvey(models.Model):
 # Tracks every AI survey conducted on a segment 
