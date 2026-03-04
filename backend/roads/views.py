@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import RoadSegment
-from .serializers import RoadSegmentSerializer
+from .models import RoadSegment, InfrastructurePoint
+from .serializers import RoadSegmentSerializer, InfrastructurePointSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Sum, Avg
@@ -42,8 +42,12 @@ def road_geojson_view(request):
     # Serialize to GeoJSON format
     geojson_data = serialize('geojson', segments, 
                              geometry_field='geom', 
-                             fields=('segment_id', 'road_type', 'pop_within_2km', 
-                                     'has_hospital', 'has_school', 'is_only_access', 
-                                     'latest_ddi_score'))
+                             fields=('segment_id', 'road_type', 'pop_within_2km', 'district', 'road_class', 'road_type',
+                                     'school_count', 'health_facility_count', 'is_only_access', 
+                                     'latest_ddi_score', 'current_mca_score', 'priority_level'))
     
     return JsonResponse(json.loads(geojson_data), safe=False)
+
+class InfrastructureListView(generics.ListAPIView):
+    queryset = InfrastructurePoint.objects.all()
+    serializer_class = InfrastructurePointSerializer

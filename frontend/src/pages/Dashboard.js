@@ -2,23 +2,35 @@ import React, { useState, useEffect } from 'react';
 import KPICard from '../components/KPIscard'; 
 import Map from '../components/Map';
 import SidebarDetail from '../components/SideBarDetail';
+import PrioritizationTable from '../components/prioritizationTable';
 import axios from 'axios';
 
 const Dashboard = () => {
   const [summary, setSummary] = useState(null);
   const [selectedSegment, setSelectedSegment] = useState(null);
   const [roadData, setRoadData] = useState(null);
+  const [infraData, setInfraData] = useState(null); 
+  const rankedRoads = roadData?.features
+  ? [...roadData.features]
+      .sort((a, b) => b.properties.current_mca_score - a.properties.current_mca_score)
+      .slice(0, 15) 
+  : [];
 
   useEffect(() => {
-    // Fetch Summary Data
+    // 1. Fetch District Summary (KPIs)
     axios.get('http://localhost:8000/api/dashboard-summary/')
       .then(res => setSummary(res.data))
       .catch(err => console.error("Summary error:", err));
     
-    // Fetch GeoJSON Data
+    // 2. Fetch Road Network (GeoJSON)
     axios.get('http://localhost:8000/api/roads-geojson/')
       .then(res => setRoadData(res.data))
       .catch(err => console.error("GeoJSON error:", err));
+
+    // 3. NEW: Fetch Infrastructure Points (Schools/Hospitals)
+    axios.get('http://localhost:8000/api/infrastructure/')
+      .then(res => setInfraData(res.data))
+      .catch(err => console.error("Infrastructure fetch error:", err));
   }, []);
 
   return (
@@ -31,31 +43,34 @@ const Dashboard = () => {
       </header>
 
       {/* 2. Top-Level KPI Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 px-10 py-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 px-10 py-6">
         <KPICard title="Total Network" value={summary?.total_segments || "0"} unit="Segs" />
         <KPICard title="Critical Vulnerability" value={summary?.vulnerability_pct || "0"} unit="%" />
         <KPICard title="Healthcare Access" value={summary?.healthcare_access_pct || "0"} unit="%" />
         <KPICard title="Damage Index (Avg)" value={summary?.avg_ddi || "0.0"} unit="DDI" />
       </div>
 
-      {/* 3. Main Workspace (Map + Sidebar) */}
-      <div className="flex flex-1 px-10 pb-6 gap-5 min-h-0">
+      {/* Main Workspace */}
+      <div className="flex flex-1 px-10 pb-6 gap-6 min-h-0">
         
-        {/* Map Container */}
-        <div className="flex-1 relative rounded-2xl overflow-hidden border border-slate-300 bg-slate-200">
-           <Map 
-            roadData={roadData} 
-            onSegmentClick={(properties) => {
-                console.log("Segment Clicked:", properties);
-                setSelectedSegment(properties);
-            }} 
-            />
+        <div className="flex-1 flex flex-col gap-8">
+          {/* Map takes the top half */}
+          <div className="flex-[2] relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
+              <Map roadData={roadData} infraData={infraData} onSegmentClick={setSelectedSegment} />
+          </div>
+
+          {/* Table takes the bottom half */}
+          <div className="flex-1 min-h-0">
+              <PrioritizationTable roads={rankedRoads} onRowClick={setSelectedSegment} />
+          </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="w-[380px] h-full overflow-y-auto">
-            <SidebarDetail segment={selectedSegment || {}} />
-        </div>
+        {/* Sidebar remains on the right */}
+        {selectedSegment && (
+          <div className="w-[380px] h-full">
+              <SidebarDetail segment={selectedSegment} onClose={() => setSelectedSegment(null)} />
+          </div>
+        )}
       </div>
     </div>
   );
