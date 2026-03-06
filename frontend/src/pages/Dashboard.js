@@ -36,12 +36,12 @@ const Dashboard = () => {
       .catch(err => console.error("Summary error:", err));
     
     // 2. Fetch Road Network (GeoJSON)
-    axios.get('http://localhost:8000/api/roads-geojson/')
+    axios.get('/api/roads-geojson/')
       .then(res => setRoadData(res.data))
       .catch(err => console.error("GeoJSON error:", err));
 
     // 3. NEW: Fetch Infrastructure Points (Schools/Hospitals)
-    axios.get('http://localhost:8000/api/infrastructure/')
+    axios.get('/api/infrastructure/')
       .then(res => setInfraData(res.data))
       .catch(err => console.error("Infrastructure fetch error:", err));
   }, []);
