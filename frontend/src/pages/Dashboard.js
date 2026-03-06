@@ -30,21 +30,23 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    // 1. Fetch District Summary (KPIs)
-    axios.get('/api/dashboard-summary/')
-      .then(res => setSummary(res.data))
-      .catch(err => console.error("Summary error:", err));
-    
-    // 2. Fetch Road Network (GeoJSON)
-    axios.get('/api/roads-geojson/')
-      .then(res => setRoadData(res.data))
-      .catch(err => console.error("GeoJSON error:", err));
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  
+  // 1. Fetch District Summary (KPIs)
+  axios.get(`${API_URL}/api/dashboard-summary/`)
+    .then(res => setSummary(res.data))
+    .catch(err => console.error("Summary error:", err));
+  
+  // 2. Fetch Road Network (GeoJSON)
+  axios.get(`${API_URL}/api/roads-geojson/`)
+    .then(res => setRoadData(res.data))
+    .catch(err => console.error("GeoJSON error:", err));
 
-    // 3. NEW: Fetch Infrastructure Points (Schools/Hospitals)
-    axios.get('/api/infrastructure/')
-      .then(res => setInfraData(res.data))
-      .catch(err => console.error("Infrastructure fetch error:", err));
-  }, []);
+  // 3. Fetch Infrastructure Points
+  axios.get(`${API_URL}/api/infrastructure/`)
+    .then(res => setInfraData(res.data))
+    .catch(err => console.error("Infrastructure fetch error:", err));
+}, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 font-['Inter'] pb-10">

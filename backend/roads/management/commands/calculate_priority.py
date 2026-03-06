@@ -13,7 +13,6 @@ class Command(BaseCommand):
         for road in segments:
             # --- 1. Condition Component (0 - 5 Scale) ---
             # SIMULATION: For the demo, we inject a realistic random score 
-            # if the road hasn't been "surveyed" by the AI yet.
             if road.latest_ddi_score == 0:
                 # Weighted random to favor "fair" roads with occasional "bad" ones
                 simulated_ddi = random.uniform(1.0, 5.0) 
