@@ -84,6 +84,6 @@ Live URL: [irams-h9e7heehcvdxa0fm.southafricanorth-01.azurewebsites.net](irams-h
 
 Fallback: Local Docker (100% functional)
 
-Video Link: 
+Video Link: [video](https://youtu.be/cCyB68v4KBw)
 
 For detailed testing documentation: [TESTING_RESULTS.md](./docs/TESTING_RESULTS.md)
