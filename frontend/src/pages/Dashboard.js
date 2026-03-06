@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // 1. Fetch District Summary (KPIs)
-    axios.get('http://localhost:8000/api/dashboard-summary/')
+    axios.get('/api/dashboard-summary/')
       .then(res => setSummary(res.data))
       .catch(err => console.error("Summary error:", err));
     
