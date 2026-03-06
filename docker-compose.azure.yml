@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=secure_password_123
 
   backend:
-    image: ${ACR_SERVER}/backend:latest
+    image: iramsregistry.azurecr.io/backend:latest
     environment:
       - DATABASE_URL=postgres://irams_admin:secure_password_123@db:5432/irams_db
       - DEBUG=0
@@ -17,7 +17,7 @@ services:
       - db
 
   frontend:
-    image: ${ACR_SERVER}/frontend:latest
+    image: iramsregistry.azurecr.io/frontend:latest
     ports:
       - "80:80"
     depends_on:
