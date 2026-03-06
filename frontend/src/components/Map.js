@@ -18,7 +18,26 @@ const schoolIcon = L.divIcon({
   iconAnchor: [12, 12],
 });
 
-const Map = ({ roadData, infraData, onSegmentClick }) => {
+const Map = ({ roadData, infraData, layers, onSegmentClick }) => {
+  const filteredInfra = infraData ? {
+    ...infraData,
+    features: infraData.features.filter(f => {
+      if (f.properties.point_type === 'healthcare' && !layers.healthcare) return false;
+      if (f.properties.point_type === 'school' && !layers.schools) return false;
+      return true;
+    })
+  } : null;
+
+  const filteredRoads = roadData ? {
+    ...roadData,
+    features: roadData.features.filter(f => {
+      const p = parseInt(f.properties.priority_level);
+      if (p === 1 && !layers.priorityHigh) return false;
+      if (p === 2 && !layers.priorityMed) return false;
+      if (p === 3 && !layers.priorityLow) return false;
+      return true;
+    })
+  } : null;
   
   const roadStyle = (feature) => {
     const priority = parseInt(feature.properties.priority_level);
@@ -26,7 +45,6 @@ const Map = ({ roadData, infraData, onSegmentClick }) => {
     if (priority === 1) color = "#ef4444"; 
     else if (priority === 2) color = "#f59e0b"; 
     else if (priority === 3) color = "#22c55e"; 
-
     return {
       color: color,
       weight: priority === 1 ? 6 : 4,
@@ -39,39 +57,32 @@ const Map = ({ roadData, infraData, onSegmentClick }) => {
       <MapContainer center={[-2.15, 30.1]} zoom={11} className="h-full w-full rounded-2xl">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-        {/* 1. Road Network Layer */}
-        {roadData && (
+        {/* 1. Road Network Layer (Conditional) */}
+        {filteredRoads && (
           <GeoJSON 
-            key={`roads-${roadData.features?.length}`} 
-            data={roadData} 
+            key={`roads-filter-${layers.priorityHigh}-${layers.priorityMed}-${layers.priorityLow}`} 
+            data={filteredRoads} 
             style={roadStyle}
             onEachFeature={(feature, layer) => {
               layer.on('click', (e) => {
                 L.DomEvent.stopPropagation(e); 
                 onSegmentClick(feature.properties);
               });
-              layer.bindTooltip(`Priority: ${feature.properties.priority_level}`);
             }}
           />
         )}
 
-        {/* 2. Infrastructure Layer */}
-        {infraData && (
+        {/* 2. Infrastructure Layer (Filtered) */}
+        {filteredInfra && (
           <GeoJSON 
-            key={`infra-${infraData.features?.length}`}
-            data={infraData}
+            key={`infra-${filteredInfra.features?.length}-${layers.healthcare}-${layers.schools}`}
+            data={filteredInfra}
             pointToLayer={(feature, latlng) => {
-              // We check the point_type from your InfrastructurePoint model
               const icon = feature.properties.point_type === 'healthcare' ? healthIcon : schoolIcon;
               return L.marker(latlng, { icon: icon });
             }}
             onEachFeature={(feature, layer) => {
-              layer.bindPopup(`
-                <div style="font-family: Inter, sans-serif;">
-                  <p style="margin:0; font-weight:bold; color:#1e293b;">${feature.properties.name}</p>
-                  <p style="margin:0; font-size:10px; color:#64748b;">${feature.properties.facility_type}</p>
-                </div>
-              `);
+              layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
             }}
           />
         )}
