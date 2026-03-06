@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    environment:
+      - POSTGRES_DB=irams_db
+      - POSTGRES_USER=irams_admin
+      - POSTGRES_PASSWORD=secure_password_123
+
+  backend:
+    image: ${ACR_SERVER}/backend:latest
+    environment:
+      - DATABASE_URL=postgres://irams_admin:secure_password_123@db:5432/irams_db
+      - DEBUG=0
+    depends_on:
+      - db
+
+  frontend:
+    image: ${ACR_SERVER}/frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
