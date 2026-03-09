@@ -27,10 +27,3 @@ jobs:
         run: |
           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest ./frontend
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest
-
-      # - name: Deploy to Azure Web App
-      #   uses: azure/webapps-deploy@v2
-      #   with:
-      #     app-name: 'irams' 
-      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      #     configuration-file: docker-compose.azure.yml
