@@ -16,22 +16,24 @@ class DashboardSummaryView(APIView):
     def get(self, request):
         total_segments = RoadSegment.objects.count()
         
-        # Real-time counts based previous processing
+        # Aggregate stats safely
+        # Note: Using > 0 checks instead of boolean has_hospital if that field doesn't exist
         stats = {
             "total_segments": total_segments,
-            "hospital_access_count": RoadSegment.objects.filter(has_hospital=True).count(),
-            "school_access_count": RoadSegment.objects.filter(has_school=True).count(),
+            "hospital_access_count": RoadSegment.objects.filter(health_facility_count__gt=0).count(),
+            "school_access_count": RoadSegment.objects.filter(school_count__gt=0).count(),
             "sole_access_count": RoadSegment.objects.filter(is_only_access=True).count(),
             "avg_ddi": RoadSegment.objects.aggregate(Avg('latest_ddi_score'))['latest_ddi_score__avg'] or 0,
+            "total_pop": RoadSegment.objects.aggregate(Sum('pop_within_2km'))['pop_within_2km__sum'] or 0,
         }
         
-        # Calculate percentages for the KPI cards
+        # Build the final summary for the React KPIs
         summary = {
             "total_segments": stats["total_segments"],
-            "healthcare_access_pct": round((stats["hospital_access_count"] / total_segments) * 100, 1) if total_segments else 0,
-            "education_access_pct": round((stats["school_access_count"] / total_segments) * 100, 1) if total_segments else 0,
-            "vulnerability_pct": round((stats["sole_access_count"] / total_segments) * 100, 1) if total_segments else 0,
-            "total_population": stats["total_population_impacted"],
+            "healthcare_access_pct": round((stats["hospital_access_count"] / total_segments) * 100, 1) if total_segments > 0 else 0,
+            "education_access_pct": round((stats["school_access_count"] / total_segments) * 100, 1) if total_segments > 0 else 0,
+            "vulnerability_pct": round((stats["sole_access_count"] / total_segments) * 100, 1) if total_segments > 0 else 0,
+            "total_population": stats["total_pop"], # Fixed the missing key issue
             "avg_ddi": round(stats["avg_ddi"], 2)
         }
         
