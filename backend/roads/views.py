@@ -1,12 +1,16 @@
 from rest_framework import generics
-from .models import RoadSegment, InfrastructurePoint
-from .serializers import RoadSegmentSerializer, InfrastructurePointSerializer
+from .models import RoadSegment, InfrastructurePoint, AlgorithmConfig
+from .serializers import RoadSegmentSerializer, InfrastructurePointSerializer, AlgorithmConfigSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.core.management import call_command
+from django.utils import timezone
 from django.db.models import Sum, Avg
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
+from authentication.permissions import IsSeniorEngineer
 
 class RoadListAPIView(generics.ListAPIView):
     queryset = RoadSegment.objects.all()
@@ -53,3 +57,53 @@ def road_geojson_view(request):
 class InfrastructureListView(generics.ListAPIView):
     queryset = InfrastructurePoint.objects.all()
     serializer_class = InfrastructurePointSerializer
+
+
+    
+class AlgorithmConfigView(APIView):
+
+    def get(self, request):
+        """Return the current MCA weights. Readable by anyone (page must load for all)."""
+        config = AlgorithmConfig.get_config()
+        serializer = AlgorithmConfigSerializer(config)
+        return Response(serializer.data)
+
+    def put(self, request):
+        """
+        Update MCA weights. Only SENIOR_ENGINEER users may do this.
+        Accepts partial updates — you can send only the fields you want to change.
+        """
+        if not request.user.is_authenticated:
+            from rest_framework.exceptions import NotAuthenticated
+            raise NotAuthenticated()
+
+        if request.user.role != 'SENIOR_ENGINEER':
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only Senior Engineers can modify algorithm weights.")
+
+        config = AlgorithmConfig.get_config()
+        # partial=True allows sending only the changed sliders
+        serializer = AlgorithmConfigSerializer(config, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(last_updated_by=request.user.email)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+class RecalculatePriorityView(APIView):
+    permission_classes = [IsAuthenticated, IsSeniorEngineer]
+
+    def post(self, request):
+        if request.user.role != 'SENIOR_ENGINEER':
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only Senior Engineers can trigger a network recalculation.")
+
+        try:
+            call_command('calculate_priority')
+            recalculated_count = RoadSegment.objects.count()
+            return Response({
+                "status": "success",
+                "message": f"Network recalculation complete. {recalculated_count} segments updated.",
+                "recalculated_at": timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response({"status": "error", "message": str(e)}, status=500)

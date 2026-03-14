@@ -25,7 +25,8 @@ const Login = ({ onLoginSuccess }) => {
         localStorage.setItem('refresh_token', data.refresh);
         localStorage.setItem('user_role', data.role);
         localStorage.setItem('user_name', data.full_name);
-        onLoginSuccess(data.role);
+        // Pass both role and name so App.js can display the user's name in the sidebar
+        onLoginSuccess(data.role, data.full_name);
       } else {
         alert(data.detail || "Invalid credentials.");
       }
