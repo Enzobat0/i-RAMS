@@ -51,10 +51,15 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 font-['Inter'] pb-10">
       
-      {/* 1. Header Section */}
+      {/* 1. Page Title Bar — slim, no logo (Sidebar owns branding) */}
       <header className="flex justify-between items-center px-10 py-5 bg-white border-b border-slate-200">
-        <h1 className="text-2xl font-extrabold text-[#155DFC]">i-RAMS</h1>
-        <div className="text-slate-500 font-medium">Bugesera District, Rwanda</div>
+        <div>
+          <h2 className="text-xl font-extrabold text-slate-800">Dashboard</h2>
+          <p className="text-xs text-slate-400 font-medium mt-0.5">Bugesera District — Road Asset Overview</p>
+        </div>
+        <div className="text-xs text-slate-400 font-medium bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+          Bugesera District, Rwanda
+        </div>
       </header>
 
       {/* 2. Top-Level KPI Grid */}

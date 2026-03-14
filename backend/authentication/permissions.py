@@ -8,10 +8,10 @@ class CanRecordSurvey(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated 
     
-class IsEngineer(permissions.BasePermission):
+class IsSeniorEngineer(permissions.BasePermission):
     """
-    Only users with the 'engineer' role can access analytical/MCDA dashboards.
+    Only users with the 'SENIOR_ENGINEER' role can access analytical/MCDA dashboards.
     """
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role in ['SENIOR_ENGINEER', 'DISTRICT_ENGINEER']
+        return request.user.is_authenticated and request.user.role in ['SENIOR_ENGINEER']
