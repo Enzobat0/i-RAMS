@@ -153,9 +153,9 @@ const InventoryPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { label: 'Total Segments',   value: totalCount.toLocaleString(), color: 'text-[#155DFC]' },
-              { label: 'High Priority',    value: loading ? '—' : rows.filter(r=>r.priority_level===1).length + (page > 1 ? '+' : ''), color: 'text-red-500' },
-              { label: 'Medium Priority',  value: loading ? '—' : rows.filter(r=>r.priority_level===2).length + (page > 1 ? '+' : ''), color: 'text-amber-500' },
-              { label: 'Low Priority',     value: loading ? '—' : rows.filter(r=>r.priority_level===3).length + (page > 1 ? '+' : ''), color: 'text-green-600' },
+              { label: 'High Priority',    value: highCount, color: 'text-red-500' },
+              { label: 'Medium Priority',  value: medCount, color: 'text-amber-500' },
+              { label: 'Low Priority',     value: lowCount, color: 'text-green-600' },
             ].map(s => (
               <div key={s.label} className="bg-white rounded-xl border border-slate-200 shadow-sm px-5 py-4">
                 <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-1">{s.label}</p>
