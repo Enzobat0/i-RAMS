@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   LayoutDashboard,
+  Table,
   Settings,
   LogOut,
   ChevronLeft,
@@ -21,20 +22,24 @@ const ROLE_COLORS = {
   SURVEY_AGENT: 'bg-slate-100 text-slate-500',
 };
 
-// Nav items definition
-// `requiredRole` — if set, only that role sees this item
 const NAV_ITEMS = [
   {
     id: 'dashboard',
     label: 'Dashboard',
     icon: LayoutDashboard,
-    requiredRole: null, // visible to all
+    requiredRole: null,
+  },
+  {
+    id: 'inventory',
+    label: 'Road Inventory',
+    icon: Table,
+    requiredRole: null, // visible to all roles
   },
   {
     id: 'configuration',
     label: 'Configuration',
     icon: Settings,
-    requiredRole: 'SENIOR_ENGINEER', // restricted
+    requiredRole: 'SENIOR_ENGINEER',
   },
 ];
 
@@ -44,7 +49,6 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
   const roleLabel = ROLE_LABELS[userRole] || userRole;
   const roleColor = ROLE_COLORS[userRole] || 'bg-slate-100 text-slate-500';
 
-  // Derive initials for the avatar from the user's name
   const initials = userName
     ? userName.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
     : '?';
@@ -107,7 +111,6 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
               {!collapsed && (
                 <span className="whitespace-nowrap">{item.label}</span>
               )}
-              {/* Active indicator dot when collapsed */}
               {collapsed && isActive && (
                 <span className="absolute left-[3px] top-1/2 -translate-y-1/2 w-1 h-6 bg-[#155DFC] rounded-r-full" />
               )}
@@ -118,9 +121,7 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
 
       {/* ── User Profile + Logout ── */}
       <div className="px-3 py-4 border-t border-slate-100 space-y-3">
-        {/* User card */}
         <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? 'justify-center' : ''}`}>
-          {/* Avatar */}
           <div className="w-8 h-8 rounded-full bg-[#155DFC] flex items-center justify-center text-white text-xs font-bold shrink-0">
             {initials}
           </div>
@@ -136,7 +137,6 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
           )}
         </div>
 
-        {/* Logout button */}
         <button
           onClick={onLogout}
           title={collapsed ? 'Log out' : undefined}
@@ -152,7 +152,7 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
         </button>
       </div>
 
-      {/* ── Collapse Toggle Button ── */}
+      {/* ── Collapse Toggle ── */}
       <button
         onClick={() => setCollapsed((c) => !c)}
         className="

@@ -27,3 +27,15 @@ jobs:
         run: |
           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest ./frontend
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart Azure Container App to pull latest images
+        run: |
+          az containerapp update \
+            --name ${{ secrets.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --image iramsregistry.azurecr.io/frontend:latest
