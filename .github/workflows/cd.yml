@@ -35,7 +35,7 @@ jobs:
 
       - name: Restart Azure Container App to pull latest images
         run: |
-          az containerapp update \
+          az webapp restart \
             --name ${{ secrets.AZURE_CONTAINER_APP_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --image iramsregistry.azurecr.io/frontend:latest
