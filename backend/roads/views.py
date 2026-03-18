@@ -1,20 +1,43 @@
-from rest_framework import generics
 from .models import RoadSegment, InfrastructurePoint, AlgorithmConfig
-from .serializers import RoadSegmentSerializer, InfrastructurePointSerializer, AlgorithmConfigSerializer
+from .serializers import RoadSegmentSerializer, InfrastructurePointSerializer, AlgorithmConfigSerializer, RoadInventorySerializer
+from rest_framework import generics, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.core.management import call_command
-from django.utils import timezone
+from rest_framework.pagination import PageNumberPagination
 from django.db.models import Sum, Avg
 from django.http import JsonResponse
 from django.core.serializers import serialize
+from django.core.management import call_command
+from django.utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
 import json
 from authentication.permissions import IsSeniorEngineer
 
+class InventoryPagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 200
+
 class RoadListAPIView(generics.ListAPIView):
-    queryset = RoadSegment.objects.all()
-    serializer_class = RoadSegmentSerializer
+    """
+    Paginated, searchable, filterable inventory of all road segments.
+    No authentication required — the table is publicly readable.
+    """
+    serializer_class   = RoadInventorySerializer
+    pagination_class   = InventoryPagination
+    filter_backends    = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields      = ['segment_id', 'district', 'road_class', 'road_type']
+    ordering_fields    = [
+        'segment_id', 'district', 'road_class', 'pop_within_2km',
+        'health_facility_count', 'school_count', 'latest_ddi_score',
+        'current_mca_score', 'priority_level',
+    ]
+    ordering           = ['-current_mca_score']   # default: highest priority first
+    filterset_fields   = ['priority_level', 'district', 'road_class', 'is_only_access']
+
+    def get_queryset(self):
+        return RoadSegment.objects.all()
 
 class DashboardSummaryView(APIView):
     def get(self, request):

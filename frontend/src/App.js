@@ -3,6 +3,7 @@ import Login from './components/Login';
 import AppLayout from './components/layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import ConfigurationPage from './pages/ConfigurationPage';
+import InventoryPage from './pages/InventoryPage';
 import './index.css';
 
 function App() {
@@ -50,6 +51,8 @@ function App() {
       case 'dashboard':
       default:
         return <Dashboard />;
+      case 'inventory':
+        return <InventoryPage />;
     }
   };
 
