@@ -10,22 +10,18 @@ const Login = ({ onLoginSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const response = await fetch('http://localhost:8000/api/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password }),
       });
-
       const data = await response.json();
-
       if (response.ok) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         localStorage.setItem('user_role', data.role);
         localStorage.setItem('user_name', data.full_name);
-        // Pass both role and name so App.js can display the user's name in the sidebar
         onLoginSuccess(data.role, data.full_name);
       } else {
         alert(data.detail || "Invalid credentials.");
@@ -39,7 +35,7 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans text-[#364153]">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-gray-100 animate-fadeIn">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-gray-100">
         <div className="p-8 md:p-10">
           <div className="flex items-center justify-center mb-8">
             <h1 className="text-3xl font-bold tracking-tight">i-RAMS</h1>
@@ -50,7 +46,7 @@ const Login = ({ onLoginSuccess }) => {
               <label className="block text-sm font-medium mb-1.5">Email</label>
               <input 
                 type="email" 
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#2B7FFF] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#1B5E20] focus:ring-2 focus:ring-green-100 outline-none transition-all"
                 placeholder="demo@irams.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -63,7 +59,7 @@ const Login = ({ onLoginSuccess }) => {
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"} 
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#2B7FFF] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#1B5E20] focus:ring-2 focus:ring-green-100 outline-none transition-all"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -82,13 +78,17 @@ const Login = ({ onLoginSuccess }) => {
             <button 
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#2B7FFF] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center"
+              className="w-full bg-[#1B5E20] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#2E7D32] transition-all flex items-center justify-center"
             >
-              {isLoading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : "Login"}
+              {isLoading
+                ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                : "Login"
+              }
             </button>
           </form>
         </div>
-        <div className="h-1.5 w-full bg-gradient-to-r from-[#2B7FFF] via-blue-400 to-[#2B7FFF]"></div>
+        {/* Bottom accent bar — green gradient */}
+        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(to right, #1B5E20, #4CAF50, #1B5E20)' }} />
       </div>
     </div>
   );

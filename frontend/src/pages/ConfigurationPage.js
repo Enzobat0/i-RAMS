@@ -15,14 +15,19 @@ const DEFAULTS = {
   threshold_medium:   2.5,
 };
 
-const authHeader = () => ({
-  Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-});
+// Reads the JWT token from localStorage and returns it as an Authorization
+// header object. Only returns the header if the token is a valid string —
+// prevents sending "Bearer null" on requests when no token is stored.
+const authHeader = () => {
+  const token = localStorage.getItem('access_token');
+  if (!token || token === 'null' || token === 'undefined') return {};
+  return { Authorization: `Bearer ${token}` };
+};
 
 const pct = (v) => `${Math.round(v * 100)}%`;
 
 // ─── WeightSlider ────────────────────────────────────────────────────────────
-// All sliders use the same brand blue (#155DFC). The percentage readout
+// All sliders use the same brand blue (#1B5E20). The percentage readout
 // and track fill are always blue — no per-slider accent colour needed.
 const WeightSlider = ({
   label,
@@ -47,7 +52,7 @@ const WeightSlider = ({
             <p className="text-sm text-slate-400 mt-1 leading-snug">{description}</p>
           )}
         </div>
-        <span className="text-2xl font-black tabular-nums text-[#155DFC] shrink-0">
+        <span className="text-2xl font-black tabular-nums text-[#1B5E20] shrink-0">
           {percentage}%
         </span>
       </div>
@@ -62,7 +67,7 @@ const WeightSlider = ({
         onChange={(e) => onChange(fieldName, parseFloat(e.target.value))}
         className="w-full h-2 rounded-lg appearance-none cursor-pointer"
         style={{
-          background: `linear-gradient(to right, #155DFC 0%, #155DFC ${fillPct}%, #e2e8f0 ${fillPct}%, #e2e8f0 100%)`,
+          background: `linear-gradient(to right, #1B5E20 0%, #1B5E20 ${fillPct}%, #e2e8f0 ${fillPct}%, #e2e8f0 100%)`,
         }}
       />
     </div>
@@ -94,7 +99,7 @@ const FormulaPreview = ({ config }) => {
       <span className={`text-sm ${sub ? 'text-slate-400' : 'font-semibold text-slate-700'}`}>
         {label}
       </span>
-      <span className={`font-bold tabular-nums ${sub ? 'text-slate-500 text-sm' : 'text-[#155DFC]'}`}>
+      <span className={`font-bold tabular-nums ${sub ? 'text-slate-500 text-sm' : 'text-[#1B5E20]'}`}>
         {value}
       </span>
     </div>
@@ -279,7 +284,7 @@ const ConfigurationPage = ({ userRole }) => {
                    && config.threshold_high > config.threshold_medium;
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-100 font-['Inter'] pb-16">
+    <div className="flex flex-col min-h-screen bg-slate-100 font-sans pb-16">
 
       {/* ── Page Header ── */}
       <header className="flex justify-between items-center px-10 py-5 bg-white border-b border-slate-200">
@@ -314,7 +319,7 @@ const ConfigurationPage = ({ userRole }) => {
       {/* ── Loading state ── */}
       {loadStatus === 'loading' && (
         <div className="flex items-center justify-center py-20">
-          <Loader size={24} className="animate-spin text-[#155DFC]" />
+          <Loader size={24} className="animate-spin text-[#1B5E20]" />
           <span className="ml-3 text-sm text-slate-500">Loading configuration…</span>
         </div>
       )}
@@ -409,7 +414,7 @@ const ConfigurationPage = ({ userRole }) => {
                       <p className="text-sm font-bold text-slate-800">High Priority Threshold</p>
                       <p className="text-sm text-slate-400 mt-1">Score ≥ this → Critical (Red)</p>
                     </div>
-                    <span className="text-2xl font-black text-[#155DFC] shrink-0">
+                    <span className="text-2xl font-black text-[#1B5E20] shrink-0">
                       {config.threshold_high.toFixed(1)}
                     </span>
                   </div>
@@ -420,7 +425,7 @@ const ConfigurationPage = ({ userRole }) => {
                     onChange={(e) => handleChange('threshold_high', parseFloat(e.target.value))}
                     className={`w-full h-2 rounded-lg appearance-none ${!isSeniorEngineer ? 'opacity-50' : 'cursor-pointer'}`}
                     style={{
-                      background: `linear-gradient(to right, #155DFC 0%, #155DFC ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 100%)`,
+                      background: `linear-gradient(to right, #1B5E20 0%, #1B5E20 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 100%)`,
                     }}
                   />
                 </div>
@@ -432,7 +437,7 @@ const ConfigurationPage = ({ userRole }) => {
                       <p className="text-sm font-bold text-slate-800">Medium Priority Threshold</p>
                       <p className="text-sm text-slate-400 mt-1">Score ≥ this → Medium (Amber)</p>
                     </div>
-                    <span className="text-2xl font-black text-[#155DFC] shrink-0">
+                    <span className="text-2xl font-black text-[#1B5E20] shrink-0">
                       {config.threshold_medium.toFixed(1)}
                     </span>
                   </div>
@@ -443,7 +448,7 @@ const ConfigurationPage = ({ userRole }) => {
                     onChange={(e) => handleChange('threshold_medium', parseFloat(e.target.value))}
                     className={`w-full h-2 rounded-lg appearance-none ${!isSeniorEngineer ? 'opacity-50' : 'cursor-pointer'}`}
                     style={{
-                      background: `linear-gradient(to right, #155DFC 0%, #155DFC ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 100%)`,
+                      background: `linear-gradient(to right, #1B5E20 0%, #1B5E20 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 100%)`,
                     }}
                   />
                 </div>
@@ -466,9 +471,9 @@ const ConfigurationPage = ({ userRole }) => {
             <FormulaPreview config={config} />
 
             {isDirty && (
-              <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5">
-                <AlertCircle size={14} className="text-[#155DFC] shrink-0" />
-                <p className="text-sm font-semibold text-[#155DFC]">
+              <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-4 py-2.5">
+                <AlertCircle size={14} className="text-[#1B5E20] shrink-0" />
+                <p className="text-sm font-semibold text-[#1B5E20]">
                   You have unsaved changes. Save before recalculating.
                 </p>
               </div>
@@ -493,7 +498,7 @@ const ConfigurationPage = ({ userRole }) => {
                       ? 'bg-green-500 text-white'
                       : saveStatus === 'error'
                         ? 'bg-red-50 text-red-600 border border-red-200'
-                        : 'bg-[#155DFC] text-white hover:bg-blue-700 shadow-sm'
+                        : 'bg-[#1B5E20] text-white hover:bg-green-900 shadow-sm'
                   }
                 `}
               >

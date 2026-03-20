@@ -10,7 +10,6 @@ const healthIcon = L.divIcon({
   iconAnchor: [12, 12],
 });
 
-
 const schoolIcon = L.divIcon({
   html: `<div style="font-size: 15px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));">🏫</div>`,
   className: 'dummy-class',
@@ -57,7 +56,6 @@ const Map = ({ roadData, infraData, layers, onSegmentClick }) => {
       <MapContainer center={[-2.15, 30.1]} zoom={11} className="h-full w-full rounded-2xl">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-        {/* 1. Road Network Layer (Conditional) */}
         {filteredRoads && (
           <GeoJSON 
             key={`roads-filter-${layers.priorityHigh}-${layers.priorityMed}-${layers.priorityLow}`} 
@@ -72,7 +70,6 @@ const Map = ({ roadData, infraData, layers, onSegmentClick }) => {
           />
         )}
 
-        {/* 2. Infrastructure Layer (Filtered) */}
         {filteredInfra && (
           <GeoJSON 
             key={`infra-${filteredInfra.features?.length}-${layers.healthcare}-${layers.schools}`}
@@ -88,8 +85,8 @@ const Map = ({ roadData, infraData, layers, onSegmentClick }) => {
         )}
       </MapContainer>
 
-      {/* 5. The Map Legend */}
-      <div className="absolute bottom-6 left-6 bg-white p-4 rounded-xl shadow-xl z-[1000] border border-slate-200 min-w-[180px]">
+      {/* Map Legend */}
+      <div className="absolute bottom-6 left-6 bg-white p-4 rounded-xl shadow-xl z-[1000] border border-slate-200 min-w-[180px] font-sans">
         <h4 className="font-bold text-slate-800 text-sm mb-3 border-b pb-2">Map Legend</h4>
         <div className="space-y-2 text-xs font-medium text-slate-600">
           <div className="flex items-center gap-3">

@@ -9,7 +9,7 @@ const PrioritizationTable = ({ roads, onRowClick }) => {
           <h3 className="font-bold text-slate-800 text-sm">Priority Rehabilitation List</h3>
           <p className="text-[0.65rem] text-slate-400 font-medium">Ranked by Weighted Multi-Criteria Analysis (MCA)</p>
         </div>
-        <button className="text-[0.65rem] font-bold text-[#155DFC] bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors">
+        <button className="text-[0.65rem] font-bold text-[#1B5E20] bg-green-50 px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors">
           EXPORT CSV
         </button>
       </div>
@@ -30,11 +30,11 @@ const PrioritizationTable = ({ roads, onRowClick }) => {
             {roads.map((road, idx) => (
               <tr 
                 key={road.id} 
-                className="hover:bg-blue-50/50 cursor-pointer transition-colors group"
+                className="hover:bg-green-50/50 cursor-pointer transition-colors group"
                 onClick={() => onRowClick(road.properties)}
               >
                 <td className="px-6 py-4">
-                  <span className={`font-black ${idx < 3 ? 'text-[#155DFC]' : 'text-slate-300'}`}>
+                  <span className={`font-black ${idx < 3 ? 'text-[#1B5E20]' : 'text-slate-300'}`}>
                     #{idx + 1}
                   </span>
                 </td>

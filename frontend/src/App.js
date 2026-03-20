@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Login from './components/Login';
 import AppLayout from './components/layout/AppLayout';
 import Dashboard from './pages/Dashboard';
@@ -48,11 +49,11 @@ function App() {
     switch (currentPage) {
       case 'configuration':
         return <ConfigurationPage userRole={userRole} />;
+      case 'inventory':
+        return <InventoryPage />;
       case 'dashboard':
       default:
         return <Dashboard />;
-      case 'inventory':
-        return <InventoryPage />;
     }
   };
 

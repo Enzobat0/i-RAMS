@@ -17,7 +17,7 @@ const ROLE_LABELS = {
 };
 
 const ROLE_COLORS = {
-  SENIOR_ENGINEER: 'bg-blue-100 text-[#155DFC]',
+  SENIOR_ENGINEER: 'bg-green-100 text-[#1B5E20]',
   DISTRICT_ENGINEER: 'bg-green-100 text-green-700',
   SURVEY_AGENT: 'bg-slate-100 text-slate-500',
 };
@@ -68,11 +68,11 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
     >
       {/* ── Logo / Brand ── */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 overflow-hidden">
-        <div className="w-8 h-8 rounded-lg bg-[#155DFC] flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-[#1B5E20] flex items-center justify-center shrink-0">
           <MapPin size={16} className="text-white" />
         </div>
         {!collapsed && (
-          <span className="font-extrabold text-lg text-[#155DFC] tracking-tight whitespace-nowrap">
+          <span className="font-extrabold text-lg text-[#1B5E20] tracking-tight whitespace-nowrap">
             i-RAMS
           </span>
         )}
@@ -99,20 +99,20 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
                 w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
                 text-sm font-semibold transition-all duration-150
                 ${isActive
-                  ? 'bg-blue-50 text-[#155DFC]'
+                  ? 'bg-green-50 text-[#1B5E20]'
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
                 }
               `}
             >
               <Icon
                 size={18}
-                className={`shrink-0 ${isActive ? 'text-[#155DFC]' : 'text-slate-400'}`}
+                className={`shrink-0 ${isActive ? 'text-[#1B5E20]' : 'text-slate-400'}`}
               />
               {!collapsed && (
                 <span className="whitespace-nowrap">{item.label}</span>
               )}
               {collapsed && isActive && (
-                <span className="absolute left-[3px] top-1/2 -translate-y-1/2 w-1 h-6 bg-[#155DFC] rounded-r-full" />
+                <span className="absolute left-[3px] top-1/2 -translate-y-1/2 w-1 h-6 bg-[#1B5E20] rounded-r-full" />
               )}
             </button>
           );
@@ -122,7 +122,7 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
       {/* ── User Profile + Logout ── */}
       <div className="px-3 py-4 border-t border-slate-100 space-y-3">
         <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? 'justify-center' : ''}`}>
-          <div className="w-8 h-8 rounded-full bg-[#155DFC] flex items-center justify-center text-white text-xs font-bold shrink-0">
+          <div className="w-8 h-8 rounded-full bg-[#1B5E20] flex items-center justify-center text-white text-xs font-bold shrink-0">
             {initials}
           </div>
           {!collapsed && (
@@ -159,7 +159,7 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
           absolute -right-3 top-[72px]
           w-6 h-6 rounded-full bg-white border border-slate-200
           flex items-center justify-center shadow-sm
-          hover:bg-blue-50 hover:border-blue-200 transition-all z-10
+          hover:bg-green-50 hover:border-green-200 transition-all z-10
         "
         title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >

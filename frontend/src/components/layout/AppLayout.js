@@ -18,7 +18,7 @@ import Sidebar from '../Sidebar';
  */
 const AppLayout = ({ currentPage, onNavigate, userRole, userName, onLogout, children }) => {
   return (
-    <div className="flex min-h-screen bg-slate-100 font-['Inter']">
+    <div className="flex min-h-screen bg-slate-100 font-sans">
 
       {/* ── Left: Persistent Sidebar ── */}
       <Sidebar

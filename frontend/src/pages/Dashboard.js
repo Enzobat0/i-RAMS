@@ -49,7 +49,7 @@ const Dashboard = () => {
 }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-100 font-['Inter'] pb-10">
+    <div className="flex flex-col min-h-screen font-sans pb-10" style={{ background: 'linear-gradient(135deg, #f0f4f1 0%, #e8f0ea 100%)' }}>
       
       {/* 1. Page Title Bar — slim, no logo (Sidebar owns branding) */}
       <header className="flex justify-between items-center px-10 py-5 bg-white border-b border-slate-200">
