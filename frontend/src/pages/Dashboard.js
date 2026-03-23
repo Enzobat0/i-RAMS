@@ -30,7 +30,7 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.REACT_APP_API_URL || '';
   
   // 1. Fetch District Summary (KPIs)
   axios.get(`${API_URL}/api/dashboard-summary/`)

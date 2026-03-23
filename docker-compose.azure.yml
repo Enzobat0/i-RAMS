@@ -1,20 +1,15 @@
 version: '3.8'
 
 services:
-  backend:
-    image: iramsregistry.azurecr.io/backend:latest
+  app:
+    image: iramsregistry.azurecr.io/irams:latest
+    ports:
+      - "80:80"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=0
       - AZURE_HOST=${AZURE_HOST}
       - AZURE_FRONTEND_URL=${AZURE_FRONTEND_URL}
-    restart: always
-
-  frontend:
-    image: iramsregistry.azurecr.io/frontend:latest
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
+      - SETUP_TOKEN=${SETUP_TOKEN}
     restart: always

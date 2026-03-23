@@ -34,6 +34,9 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'backend']
 
+AZURE_HOST = env('AZURE_HOST', default='')
+if AZURE_HOST:
+    ALLOWED_HOSTS.append(AZURE_HOST)
 
 # Application definition
 
@@ -129,6 +132,14 @@ CORS_ALLOWED_ORIGINS = [
      "http://localhost:3002",
 ]
 
+AZURE_FRONTEND_URL = env('AZURE_FRONTEND_URL', default='')
+if AZURE_FRONTEND_URL:
+    CORS_ALLOWED_ORIGINS.append(AZURE_FRONTEND_URL)
+
+CSRF_TRUSTED_ORIGINS = []
+if AZURE_FRONTEND_URL:
+    CSRF_TRUSTED_ORIGINS.append(AZURE_FRONTEND_URL)
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -145,3 +156,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
 import SidebarDetail from '../components/SideBarDetail';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = process.env.REACT_APP_API_URL || '';
 
 const PriorityBadge = ({ level }) => {
   const map = {
