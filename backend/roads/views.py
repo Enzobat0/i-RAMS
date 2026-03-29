@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.core.management import call_command
 from django.utils import timezone
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 import json
 from authentication.permissions import IsSeniorEngineer
@@ -66,16 +67,24 @@ class DashboardSummaryView(APIView):
         
         return Response(summary)
     
+GEOJSON_CACHE_KEY = 'roads_geojson_full'
+
 def road_geojson_view(request):
+    # Try cache first — avoids re-serializing 1,555 geometries on every request
+    cached = cache.get(GEOJSON_CACHE_KEY)
+    if cached:
+        return JsonResponse(cached, safe=False)
+
     segments = RoadSegment.objects.all()
-    # Serialize to GeoJSON format
     geojson_data = serialize('geojson', segments, 
                              geometry_field='geom', 
                              fields=('segment_id', 'road_type', 'pop_within_2km', 'district', 'road_class', 'road_type',
                                      'school_count', 'health_facility_count', 'is_only_access', 
                                      'latest_ddi_score', 'current_mca_score', 'priority_level'))
     
-    return JsonResponse(json.loads(geojson_data), safe=False)
+    parsed = json.loads(geojson_data)
+    cache.set(GEOJSON_CACHE_KEY, parsed, 60 * 60 * 24)  # Cache for 24 hours
+    return JsonResponse(parsed, safe=False)
 
 class InfrastructureListView(generics.ListAPIView):
     queryset = InfrastructurePoint.objects.all()
@@ -122,6 +131,8 @@ class RecalculatePriorityView(APIView):
 
         try:
             call_command('calculate_priority')
+            # Invalidate only the GeoJSON cache — leaves sessions and other cache intact
+            cache.delete(GEOJSON_CACHE_KEY)
             recalculated_count = RoadSegment.objects.count()
             return Response({
                 "status": "success",
