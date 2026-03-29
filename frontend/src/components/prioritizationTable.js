@@ -1,6 +1,36 @@
 import React from 'react';
 
 const PrioritizationTable = ({ roads, onRowClick }) => {
+
+  const handleExportCSV = () => {
+    if (!roads || roads.length === 0) return;
+
+    const headers = ['Rank', 'Segment ID', 'MCA Score', 'DDI Score', 'Health Facilities', 'Schools', 'Priority Level'];
+    const rows = roads.map((road, idx) => [
+      idx + 1,
+      road.properties.segment_id,
+      road.properties.current_mca_score?.toFixed(4),
+      road.properties.latest_ddi_score?.toFixed(4),
+      road.properties.health_facility_count,
+      road.properties.school_count,
+      road.properties.priority_level,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'priority_rehabilitation_list.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full">
       {/* Table Header */}
@@ -9,7 +39,10 @@ const PrioritizationTable = ({ roads, onRowClick }) => {
           <h3 className="font-bold text-slate-800 text-sm">Priority Rehabilitation List</h3>
           <p className="text-[0.65rem] text-slate-400 font-medium">Ranked by Weighted Multi-Criteria Analysis (MCA)</p>
         </div>
-        <button className="text-[0.65rem] font-bold text-[#1B5E20] bg-green-50 px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors">
+        <button
+          onClick={handleExportCSV}
+          className="text-[0.65rem] font-bold text-[#025864] bg-[#025864]/5 px-3 py-1.5 rounded-lg hover:bg-[#025864]/10 transition-colors"
+        >
           EXPORT CSV
         </button>
       </div>
@@ -28,13 +61,13 @@ const PrioritizationTable = ({ roads, onRowClick }) => {
           </thead>
           <tbody className="divide-y divide-slate-100">
             {roads.map((road, idx) => (
-              <tr 
-                key={road.id} 
-                className="hover:bg-green-50/50 cursor-pointer transition-colors group"
+              <tr
+                key={road.id}
+                className="hover:bg-[#025864]/[0.03] cursor-pointer transition-colors group"
                 onClick={() => onRowClick(road.properties)}
               >
                 <td className="px-6 py-4">
-                  <span className={`font-black ${idx < 3 ? 'text-[#1B5E20]' : 'text-slate-300'}`}>
+                  <span className={`font-black ${idx < 3 ? 'text-[#025864]' : 'text-slate-300'}`}>
                     #{idx + 1}
                   </span>
                 </td>

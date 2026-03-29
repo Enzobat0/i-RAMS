@@ -64,7 +64,7 @@ const Dashboard = () => {
 
       {/* 2. Top-Level KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 px-10 py-6">
-        <KPICard title="Total Network" value={summary?.total_segments || "0"} unit="Segs" />
+        <KPICard title="Total Network" value={summary?.total_segments || "0"} unit="Segments" />
         <KPICard title="Critical Vulnerability" value={summary?.vulnerability_pct || "0"} unit="%" />
         <KPICard title="Healthcare Access" value={summary?.healthcare_access_pct || "0"} unit="%" />
         <KPICard title="Damage Index (Avg)" value={summary?.avg_ddi || "0.0"} unit="DDI" />

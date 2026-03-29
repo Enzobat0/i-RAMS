@@ -47,7 +47,7 @@ const Login = ({ onLoginSuccess }) => {
               <label className="block text-sm font-medium mb-1.5">Email</label>
               <input 
                 type="email" 
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#1B5E20] focus:ring-2 focus:ring-green-100 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#025864] focus:ring-2 focus:ring-teal-100 outline-none transition-all"
                 placeholder="demo@irams.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -60,7 +60,7 @@ const Login = ({ onLoginSuccess }) => {
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"} 
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#1B5E20] focus:ring-2 focus:ring-green-100 outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#025864] focus:ring-2 focus:ring-teal-100 outline-none transition-all"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -79,7 +79,7 @@ const Login = ({ onLoginSuccess }) => {
             <button 
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#1B5E20] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#2E7D32] transition-all flex items-center justify-center"
+              className="w-full bg-[#025864] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#03717f] transition-all flex items-center justify-center"
             >
               {isLoading
                 ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -89,7 +89,7 @@ const Login = ({ onLoginSuccess }) => {
           </form>
         </div>
         {/* Bottom accent bar — green gradient */}
-        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(to right, #1B5E20, #4CAF50, #1B5E20)' }} />
+        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(to right, #025864, #00D47E, #025864)' }} />
       </div>
     </div>
   );

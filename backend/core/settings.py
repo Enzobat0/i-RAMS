@@ -34,9 +34,11 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'backend']
 
+# Add Azure host if set
 AZURE_HOST = env('AZURE_HOST', default='')
 if AZURE_HOST:
     ALLOWED_HOSTS.append(AZURE_HOST)
+
 
 # Application definition
 
@@ -129,7 +131,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
-     "http://localhost:3002",
+    "http://localhost:3002",
 ]
 
 AZURE_FRONTEND_URL = env('AZURE_FRONTEND_URL', default='')
@@ -157,3 +159,25 @@ USE_TZ = True
 
 STATIC_URL = '/django-static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}

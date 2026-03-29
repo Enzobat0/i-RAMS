@@ -27,7 +27,7 @@ const authHeader = () => {
 const pct = (v) => `${Math.round(v * 100)}%`;
 
 // ─── WeightSlider ────────────────────────────────────────────────────────────
-// All sliders use the same brand blue (#1B5E20). The percentage readout
+// All sliders use the same brand blue (#025864). The percentage readout
 // and track fill are always blue — no per-slider accent colour needed.
 const WeightSlider = ({
   label,
@@ -52,7 +52,7 @@ const WeightSlider = ({
             <p className="text-sm text-slate-400 mt-1 leading-snug">{description}</p>
           )}
         </div>
-        <span className="text-2xl font-black tabular-nums text-[#1B5E20] shrink-0">
+        <span className="text-2xl font-black tabular-nums text-[#025864] shrink-0">
           {percentage}%
         </span>
       </div>
@@ -67,7 +67,7 @@ const WeightSlider = ({
         onChange={(e) => onChange(fieldName, parseFloat(e.target.value))}
         className="w-full h-2 rounded-lg appearance-none cursor-pointer"
         style={{
-          background: `linear-gradient(to right, #1B5E20 0%, #1B5E20 ${fillPct}%, #e2e8f0 ${fillPct}%, #e2e8f0 100%)`,
+          background: `linear-gradient(to right, #025864 0%, #025864 ${fillPct}%, #e2e8f0 ${fillPct}%, #e2e8f0 100%)`,
         }}
       />
     </div>
@@ -99,7 +99,7 @@ const FormulaPreview = ({ config }) => {
       <span className={`text-sm ${sub ? 'text-slate-400' : 'font-semibold text-slate-700'}`}>
         {label}
       </span>
-      <span className={`font-bold tabular-nums ${sub ? 'text-slate-500 text-sm' : 'text-[#1B5E20]'}`}>
+      <span className={`font-bold tabular-nums ${sub ? 'text-slate-500 text-sm' : 'text-[#025864]'}`}>
         {value}
       </span>
     </div>
@@ -163,7 +163,7 @@ const FormulaPreview = ({ config }) => {
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-[#00D47E] shrink-0" />
               <span className="text-sm text-slate-500">Low Priority</span>
             </div>
             <span className="font-bold text-sm text-slate-700">
@@ -319,7 +319,7 @@ const ConfigurationPage = ({ userRole }) => {
       {/* ── Loading state ── */}
       {loadStatus === 'loading' && (
         <div className="flex items-center justify-center py-20">
-          <Loader size={24} className="animate-spin text-[#1B5E20]" />
+          <Loader size={24} className="animate-spin text-[#025864]" />
           <span className="ml-3 text-sm text-slate-500">Loading configuration…</span>
         </div>
       )}
@@ -414,7 +414,7 @@ const ConfigurationPage = ({ userRole }) => {
                       <p className="text-sm font-bold text-slate-800">High Priority Threshold</p>
                       <p className="text-sm text-slate-400 mt-1">Score ≥ this → Critical (Red)</p>
                     </div>
-                    <span className="text-2xl font-black text-[#1B5E20] shrink-0">
+                    <span className="text-2xl font-black text-[#025864] shrink-0">
                       {config.threshold_high.toFixed(1)}
                     </span>
                   </div>
@@ -425,7 +425,7 @@ const ConfigurationPage = ({ userRole }) => {
                     onChange={(e) => handleChange('threshold_high', parseFloat(e.target.value))}
                     className={`w-full h-2 rounded-lg appearance-none ${!isSeniorEngineer ? 'opacity-50' : 'cursor-pointer'}`}
                     style={{
-                      background: `linear-gradient(to right, #1B5E20 0%, #1B5E20 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 100%)`,
+                      background: `linear-gradient(to right, #025864 0%, #025864 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 ${((config.threshold_high - 2.5) / 2.5) * 100}%, #e2e8f0 100%)`,
                     }}
                   />
                 </div>
@@ -437,7 +437,7 @@ const ConfigurationPage = ({ userRole }) => {
                       <p className="text-sm font-bold text-slate-800">Medium Priority Threshold</p>
                       <p className="text-sm text-slate-400 mt-1">Score ≥ this → Medium (Amber)</p>
                     </div>
-                    <span className="text-2xl font-black text-[#1B5E20] shrink-0">
+                    <span className="text-2xl font-black text-[#025864] shrink-0">
                       {config.threshold_medium.toFixed(1)}
                     </span>
                   </div>
@@ -448,7 +448,7 @@ const ConfigurationPage = ({ userRole }) => {
                     onChange={(e) => handleChange('threshold_medium', parseFloat(e.target.value))}
                     className={`w-full h-2 rounded-lg appearance-none ${!isSeniorEngineer ? 'opacity-50' : 'cursor-pointer'}`}
                     style={{
-                      background: `linear-gradient(to right, #1B5E20 0%, #1B5E20 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 100%)`,
+                      background: `linear-gradient(to right, #025864 0%, #025864 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 ${((config.threshold_medium - 0.5) / 3.5) * 100}%, #e2e8f0 100%)`,
                     }}
                   />
                 </div>
@@ -472,8 +472,8 @@ const ConfigurationPage = ({ userRole }) => {
 
             {isDirty && (
               <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-4 py-2.5">
-                <AlertCircle size={14} className="text-[#1B5E20] shrink-0" />
-                <p className="text-sm font-semibold text-[#1B5E20]">
+                <AlertCircle size={14} className="text-[#025864] shrink-0" />
+                <p className="text-sm font-semibold text-[#025864]">
                   You have unsaved changes. Save before recalculating.
                 </p>
               </div>
@@ -495,10 +495,10 @@ const ConfigurationPage = ({ userRole }) => {
                   ${!isSeniorEngineer || !isFormValid
                     ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                     : saveStatus === 'success'
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-[#00D47E] text-white'
                       : saveStatus === 'error'
                         ? 'bg-red-50 text-red-600 border border-red-200'
-                        : 'bg-[#1B5E20] text-white hover:bg-green-900 shadow-sm'
+                        : 'bg-[#025864] text-white hover:bg-green-900 shadow-sm'
                   }
                 `}
               >

@@ -5,7 +5,7 @@ const SidebarDetail = ({ segment, onClose }) => {
     switch (level) {
       case 1: return { label: "CRITICAL", color: "bg-red-500", text: "text-white" };
       case 2: return { label: "MEDIUM", color: "bg-amber-500", text: "text-white" };
-      case 3: return { label: "LOW", color: "bg-green-500", text: "text-white" };
+      case 3: return { label: "LOW", color: "bg-teal-500", text: "text-white" };
       default: return { label: "UNSET", color: "bg-slate-200", text: "text-slate-500" };
     }
   };
@@ -42,7 +42,7 @@ const SidebarDetail = ({ segment, onClose }) => {
         <p className="text-slate-800 font-mono text-xs leading-none mb-2">{segment.segment_id || "N/A"}</p>
         <div className="flex gap-2">
           <div className="px-2 py-1 bg-slate-100 rounded text-slate-600 text-[0.6rem] font-bold uppercase">{segment.road_type || "Unknown"}</div>
-          <div className="px-2 py-1 bg-green-50 rounded text-[#1B5E20] text-[0.6rem] font-bold uppercase">{segment.road_class || "Class Unset"}</div>
+          <div className="px-2 py-1 bg-teal-50 rounded text-[#025864] text-[0.6rem] font-bold uppercase">{segment.road_class || "Class Unset"}</div>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ const SidebarDetail = ({ segment, onClose }) => {
 
       {/* Access Metrics */}
       <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
-        <h4 className="text-[#1B5E20] text-[0.7rem] font-bold uppercase tracking-wide mb-4">Access Metrics</h4>
+        <h4 className="text-[#025864] text-[0.7rem] font-bold uppercase tracking-wide mb-4">Access Metrics</h4>
         <div className="space-y-3">
           <div className="flex justify-between items-center text-sm">
             <span className="text-slate-600 font-medium">Healthcare Facilities</span>
@@ -72,14 +72,14 @@ const SidebarDetail = ({ segment, onClose }) => {
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-slate-600 font-medium">Sole Access Road</span>
-            <span className={`font-bold ${segment.is_only_access ? 'text-[#1B5E20]' : 'text-slate-400'}`}>{segment.is_only_access ? 'Yes' : 'No'}</span>
+            <span className={`font-bold ${segment.is_only_access ? 'text-[#025864]' : 'text-slate-400'}`}>{segment.is_only_access ? 'Yes' : 'No'}</span>
           </div>
         </div>
       </div>
 
       {/* Population Impact - Added extra top margin to separate from the list above */}
       <div className="mt-6 pt-6 border-t border-slate-100">
-        <h4 className="text-[#1B5E20] text-[0.7rem] font-bold uppercase tracking-wide mb-1">Regional Impact</h4>
+        <h4 className="text-[#025864] text-[0.7rem] font-bold uppercase tracking-wide mb-1">Regional Impact</h4>
         <p className="text-slate-400 text-[0.65rem] mb-2 font-medium">Residents within 2km catchment</p>
         <p className="text-3xl font-black text-slate-900 tracking-tight">
           {segment.pop_within_2km?.toLocaleString() || "0"}

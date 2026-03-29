@@ -4,6 +4,6 @@
 
 @layer base {
   html, body {
-    font-family: "Mona Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
   }
 }
