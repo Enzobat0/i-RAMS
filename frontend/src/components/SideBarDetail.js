@@ -53,7 +53,7 @@ const SidebarDetail = ({ segment, onClose }) => {
           <p className="text-white text-2xl font-black">{segment.current_mca_score || "0.0"}</p>
         </div>
         <div className="bg-white p-3 rounded-xl border border-slate-200">
-          <p className="text-slate-400 text-[0.6rem] font-bold uppercase">DDI Score</p>
+          <p className="text-slate-400 text-[0.6rem] font-bold uppercase">DDI Score [simulated]</p>
           <p className="text-slate-800 text-2xl font-black">{segment.latest_ddi_score || "0.0"}</p>
         </div>
       </div>

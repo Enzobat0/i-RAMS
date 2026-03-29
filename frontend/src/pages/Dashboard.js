@@ -67,7 +67,7 @@ const Dashboard = () => {
         <KPICard title="Total Network" value={summary?.total_segments || "0"} unit="Segments" />
         <KPICard title="Critical Vulnerability" value={summary?.vulnerability_pct || "0"} unit="%" />
         <KPICard title="Healthcare Access" value={summary?.healthcare_access_pct || "0"} unit="%" />
-        <KPICard title="Damage Index (Avg)" value={summary?.avg_ddi || "0.0"} unit="DDI" />
+        <KPICard title="Damage Index (Avg) [simulated]" value={summary?.avg_ddi || "0.0"} unit="DDI" />
       </div>
 
       {/* Main Workspace */}

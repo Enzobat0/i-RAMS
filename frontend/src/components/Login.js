@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
-const Login = ({ onLoginSuccess }) => {
+const Login = ({ onLoginSuccess, onShowPrivacy }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +87,13 @@ const Login = ({ onLoginSuccess }) => {
               }
             </button>
           </form>
+          <button
+            type="button"
+            onClick={onShowPrivacy}
+            className="w-full text-center text-xs text-slate-400 hover:text-[#025864] transition-colors mt-4"
+          >
+            Privacy Policy & Terms
+          </button>
         </div>
         {/* Bottom accent bar — green gradient */}
         <div className="h-1.5 w-full" style={{ background: 'linear-gradient(to right, #025864, #00D47E, #025864)' }} />

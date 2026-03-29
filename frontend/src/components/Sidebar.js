@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Route,
+  Shield,
 } from 'lucide-react';
 
 const ROLE_LABELS = {
@@ -131,6 +132,20 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
               </div>
             )}
           </div>
+
+          <button
+            onClick={() => onNavigate('privacy')}
+            title={collapsed ? 'Privacy Policy' : undefined}
+            className={`
+              w-full flex items-center gap-3 px-3 py-2 rounded-xl
+              text-xs font-semibold text-white/40
+              hover:bg-white/5 hover:text-white/70 transition-all
+              ${collapsed ? 'justify-center' : ''}
+            `}
+          >
+            <Shield size={14} className="shrink-0" />
+            {!collapsed && <span>Privacy Policy</span>}
+          </button>
 
           <button
             onClick={onLogout}
