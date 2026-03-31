@@ -287,7 +287,7 @@ const ConfigurationPage = ({ userRole }) => {
     <div className="flex flex-col min-h-screen bg-slate-100 font-sans pb-16">
 
       {/* ── Page Header ── */}
-      <header className="flex justify-between items-center px-10 py-5 bg-white border-b border-slate-200">
+      <header className="flex justify-between items-center px-4 sm:px-6 lg:px-10 py-4 sm:py-5 bg-white border-b border-slate-200">
         <div>
           <h2 className="text-xl font-extrabold text-slate-800">Algorithm Configuration</h2>
           <p className="text-xs text-slate-400 font-medium mt-0.5">
@@ -334,7 +334,7 @@ const ConfigurationPage = ({ userRole }) => {
       )}
 
       {loadStatus !== 'loading' && (
-        <div className="px-10 py-6 grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
+        <div className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
 
           {/* ── LEFT: Sliders ── */}
           <div className="space-y-6">

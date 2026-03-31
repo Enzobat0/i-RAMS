@@ -35,7 +35,7 @@ const COLUMNS = [
   { key: 'health_facility_count', label: 'Health',      sortable: true  },
   { key: 'school_count',          label: 'Schools',     sortable: true  },
   { key: 'is_only_access',        label: 'Sole Access', sortable: false },
-  { key: 'latest_ddi_score',      label: 'DDI',         sortable: true  },
+  { key: 'latest_ddi_score',      label: 'DDI (Sim.)',  sortable: true  },
   { key: 'current_mca_score',     label: 'MCA Score',   sortable: true  },
   { key: 'priority_level',        label: 'Priority',    sortable: true  },
 ];
@@ -106,20 +106,20 @@ const InventoryPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 font-sans pb-10">
 
-      <header className="flex justify-between items-center px-10 py-5 bg-white border-b border-slate-200">
+      <header className="flex justify-between items-center px-4 sm:px-6 lg:px-10 py-4 sm:py-5 bg-white border-b border-slate-200">
         <div>
           <h2 className="text-xl font-extrabold text-slate-800">Road Asset Inventory</h2>
           <p className="text-xs text-slate-400 font-medium mt-0.5">
             Bugesera District — {totalCount.toLocaleString()} road segments
           </p>
         </div>
-        <div className="text-xs text-slate-400 font-medium bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+        <div className="hidden sm:block text-xs text-slate-400 font-medium bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
           Bugesera District, Rwanda
         </div>
       </header>
 
       <div className="flex flex-1 min-h-0">
-        <div className="flex-1 flex flex-col px-10 py-6 gap-5 min-w-0">
+        <div className="flex-1 flex flex-col px-4 sm:px-6 lg:px-10 py-4 sm:py-6 gap-4 sm:gap-5 min-w-0">
 
           {/* Summary stat strip — counts from API, not from current page */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -186,7 +186,7 @@ const InventoryPage = () => {
 
             {/* Table */}
             <div className="overflow-auto flex-1">
-              <table className="w-full text-left text-sm border-collapse">
+              <table className="w-full min-w-[700px] text-left text-sm border-collapse">
                 <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
                   <tr>
                     {COLUMNS.map(col => (
@@ -283,7 +283,7 @@ const InventoryPage = () => {
         </div>
 
         {selectedSegment && (
-          <div className="w-[360px] shrink-0 px-0 py-6 pr-6">
+          <div className="hidden lg:block w-[360px] shrink-0 px-0 py-6 pr-6">
             <SidebarDetail segment={selectedSegment} onClose={() => setSelectedSegment(null)} />
           </div>
         )}

@@ -10,7 +10,7 @@ const LayerToggle = ({ layers, onToggle }) => {
   ];
 
   return (
-    <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-xl z-[1000] border border-slate-200 min-w-[200px]">
+    <div className="absolute top-3 right-3 sm:top-6 sm:right-6 bg-white/90 backdrop-blur-sm p-3 sm:p-4 rounded-xl shadow-xl z-[1000] border border-slate-200 min-w-[170px] sm:min-w-[200px]">
       <h4 className="font-bold text-slate-800 text-[0.7rem] uppercase tracking-wider mb-3 border-b pb-2">Layer Filters</h4>
       <div className="space-y-3">
         {toggleItems.map((item) => (
