@@ -13,18 +13,17 @@ const SidebarDetail = ({ segment, onClose }) => {
   const badge = getPriorityBadge(segment.priority_level);
   
   return (
-    // Added overflow-y-auto and pb-10 to ensure bottom content is never cut off
-    <div className="relative flex flex-col h-full bg-white p-6 pb-10 font-sans shadow-lg border-l border-slate-200 rounded-2xl overflow-y-auto">
+    <div className="relative flex flex-col h-fit bg-white p-6 pb-6 font-sans shadow-lg border-l border-slate-200 rounded-2xl overflow-y-auto">
       
-      {/* Header with clear space for the Close Button */}
-      <div className="flex justify-between items-start mb-4 pr-10"> {/* pr-10 creates space for the X */}
+      {/* Header*/}
+      <div className="flex justify-between items-start mb-4 pr-10">
         <h2 className="text-slate-800 text-lg font-bold">Asset Resume</h2>
         <span className={`${badge.color} ${badge.text} text-[0.6rem] font-black px-2 py-1 rounded-md tracking-tighter shrink-0`}>
           {badge.label}
         </span>
       </div>
 
-      {/* Close Button - Positioned consistently */}
+      {/* Close Button  */}
       <button 
         onClick={onClose}
         className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors p-1"
@@ -77,8 +76,8 @@ const SidebarDetail = ({ segment, onClose }) => {
         </div>
       </div>
 
-      {/* Population Impact - Added extra top margin to separate from the list above */}
-      <div className="mt-6 pt-6 border-t border-slate-100">
+      {/* Population Impact  */}
+      <div className="mt-2 pt-4 border-t border-slate-100">
         <h4 className="text-[#025864] text-[0.7rem] font-bold uppercase tracking-wide mb-1">Regional Impact</h4>
         <p className="text-slate-400 text-[0.65rem] mb-2 font-medium">Residents within 2km catchment</p>
         <p className="text-3xl font-black text-slate-900 tracking-tight">

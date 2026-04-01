@@ -58,9 +58,9 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
   );
 
   return (
-    <div className={`relative shrink-0 transition-all duration-300 ease-in-out ${collapsed ? 'w-[72px]' : 'w-[240px]'}`}>
+    <div className={`sticky top-0 h-screen shrink-0 transition-all duration-300 ease-in-out z-40 ${collapsed ? 'w-[72px]' : 'w-[240px]'}`}>
       <aside
-        className="flex flex-col bg-[#025864] sticky top-0 h-screen overflow-y-auto"
+        className="flex flex-col bg-[#025864] h-full overflow-y-auto shadow-2xl"
       >
         {/* Logo / Brand */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10 overflow-hidden">
@@ -116,7 +116,7 @@ const Sidebar = ({ currentPage, onNavigate, userRole, userName, onLogout }) => {
         </nav>
 
         {/* User Profile + Logout */}
-        <div className="px-3 py-4 border-t border-white/10 space-y-3">
+        <div className="px-3 py-3 border-t border-white/10 space-y-1.5">
           <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? 'justify-center' : ''}`}>
             <div className="w-8 h-8 rounded-full bg-[#00D47E] flex items-center justify-center text-[#025864] text-xs font-bold shrink-0">
               {initials}
