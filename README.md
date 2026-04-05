@@ -2,12 +2,21 @@
 
 **Student:** Enzo Batungwanayo  
 **Institution:** African Leadership University  
-**Supervisor:** Neza David Tuyishimire  
+**Supervisor:** Neza David Tuyishimire
 
+**[https://irams.azurewebsites.net/](https://irams.azurewebsites.net/)**
 
 ### Project Description
 
-i-RAMS is a data-driven initiative designed to modernize road maintenance monitoring in Rwanda, specifically focused on the Bugesera District. By combining GIS (PostGIS), Computer Vision (YOLO), and Web Technologies (Django/React), i-RAMS automates the detection of road distresses (like potholes and cracks) and ranks road segments for maintenance based on a Multi-Criteria Decision Analysis (MCDA).
+i-RAMS is a web-based decision-support tool designed to assist district engineers and government officials in prioritising feeder road maintenance in Bugesera District, Rwanda. The system integrates geospatial road network data (MININFRA shapefiles), population density data (WorldPop rasters), and infrastructure location data into a centralised PostGIS database, and applies a configurable Multi-Criteria Analysis (MCA) algorithm to rank all 1,555 road segments by maintenance priority.
+
+### Tech Stack
+|Layer              | Technology                        |
+|-------------------|-----------------------------------|
+|Frontend           | React, Tailwind CSS, Leaflet.js |
+|BackendDjango | REST Framework, GeoDjango|
+|Database | PostgreSQL + PostGIS|
+|Deployment | Docker, Microsoft Azure App Service, GitHub Actions CI/CD
 
 ### Prerequisites
 - Docker Desktop installed
@@ -18,8 +27,8 @@ i-RAMS is a data-driven initiative designed to modernize road maintenance monito
 ### Installation & Running Locally
 ```bash
 # 1. Clone repository
-git clone https://github.com/YOUR_USERNAME/i-rams.git
-cd i-rams
+git clone https://github.com/Enzobat0/i-RAMS
+cd i-RAMS
 
 # 2. Start all services
 docker-compose up --build
@@ -37,7 +46,16 @@ docker-compose exec backend python manage.py calculate-population-access
 docker-compose exec backend python manage.py calculate-only-access
 docker-compose exec backend python manage.py calculate_priority
 
-# 5. Access application
+# 5. Create an admin user
+docker-compose exec backend python manage.py create_user \
+  --email admin@irams.rw \
+  --password YourPassword123 \
+  --role SENIOR_ENGINEER \
+  --first_name Admin \
+  --last_name User \
+  --superuser
+
+# 6. Access the application
 # Frontend: http://localhost:3001
 # Backend API: http://localhost:8000/api/
 ```
@@ -70,20 +88,27 @@ Where the Criticality Index ($Cr_{idx}$) is derived from:
 
 - Isolation (20%): Binary Score (5 if sole access route, 0 otherwise)
 
+All criteria weights are configurable by Senior Engineers.
+
 # Deployment Plan (In progress)
 
 **Target:** Azure App Service Multi-Container (PostGIS + Django + React)
 
 ### **Current Status**
-- Dockerized (3 services: db/backend/frontend) **(Done)**
-- ACR created (iramsregistry.azurecr.io) **(Done)**
-- GitHub Actions pipeline ready **(Done)**
-- Azure Web App deployment (multi-container via docker-compose) **(In progress)**
+The system is deployed as a single Docker container on Azure App Service with an Azure Database for PostgreSQL Flexible Server.
 
-Live URL: [irams-h9e7heehcvdxa0fm.southafricanorth-01.azurewebsites.net](irams-h9e7heehcvdxa0fm.southafricanorth-01.azurewebsites.net)
+- CI Pipeline: GitHub Actions runs all 31 unit tests on every push
+- CD Pipeline: On push to main, builds the Docker image, pushes to Azure Container Registry, and restarts the App Service
+- Live URL: https://irams.azurewebsites.net
 
-Fallback: Local Docker (100% functional)
 
-Video Link: [video](https://youtu.be/cCyB68v4KBw)
+Video Link: [Demo](https://drive.google.com/file/d/12XqF5DL0eTq_iUjVlR6_mdyBy1NACpHT/view)
 
-For detailed testing documentation: [TESTING_RESULTS.md](./docs/TESTING_RESULTS.md)
+Data Limitations
+
+DDI (Damage Density Index) scores are simulated for demonstration purposes. Real condition survey data from RTDA was pending at the time of submission.
+The road network dataset includes only District Road Class 1 and Class 2 segments. Unclassified roads are not included.
+Infrastructure data is limited to facilities documented in MININFRA shapefiles.
+
+License
+This project was developed as a BSc Software Engineering capstone at the African Leadership University under MIT license
